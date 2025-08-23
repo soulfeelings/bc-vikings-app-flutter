@@ -63,9 +63,10 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           id: string
-          jersey_number: number | null
           level: number | null
+          login: string
           name: string
+          password: string | null
           position: string | null
           total_points: number | null
           updated_at: string
@@ -76,9 +77,10 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           id?: string
-          jersey_number?: number | null
           level?: number | null
+          login: string
           name: string
+          password?: string | null
           position?: string | null
           total_points?: number | null
           updated_at?: string
@@ -89,9 +91,10 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           id?: string
-          jersey_number?: number | null
           level?: number | null
+          login?: string
           name?: string
+          password?: string | null
           position?: string | null
           total_points?: number | null
           updated_at?: string

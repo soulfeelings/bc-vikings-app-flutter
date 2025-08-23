@@ -3,7 +3,8 @@ export interface Player {
   name: string;
   age?: number;
   position?: string;
-  jersey_number?: number;
+  login: string;
+  password?: string;
   total_points: number;
   attendance_count: number;
   level: number;
@@ -33,25 +34,25 @@ export interface PlayerWithAttendance extends Player {
 }
 
 export const POSITIONS = [
-  'Point Guard',
-  'Shooting Guard', 
-  'Small Forward',
-  'Power Forward',
-  'Center'
+  "Point Guard",
+  "Shooting Guard",
+  "Small Forward",
+  "Power Forward",
+  "Center",
 ] as const;
 
 export const LEVEL_NAMES = {
-  1: 'Новичок',
-  2: 'Любитель', 
-  3: 'Игрок',
-  4: 'Звезда',
-  5: 'Легенда'
+  1: "Новичок",
+  2: "Любитель",
+  3: "Игрок",
+  4: "Звезда",
+  5: "Легенда",
 } as const;
 
 export const LEVEL_COLORS = {
-  1: 'text-muted-foreground',
-  2: 'text-accent',
-  3: 'text-primary',
-  4: 'text-primary-glow',
-  5: 'text-accent bg-gradient-primary bg-clip-text text-transparent'
+  1: "text-muted-foreground",
+  2: "text-accent",
+  3: "text-primary",
+  4: "text-primary-glow",
+  5: "text-accent bg-gradient-primary bg-clip-text text-transparent",
 } as const;

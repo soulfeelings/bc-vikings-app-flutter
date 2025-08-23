@@ -1,9 +1,21 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { UserPlus } from "lucide-react";
 import { POSITIONS } from "@/types/basketball";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,49 +32,55 @@ export const AddPlayerDialog = ({ onPlayerAdded }: AddPlayerDialogProps) => {
     name: "",
     age: "",
     position: "",
-    jersey_number: ""
+    login: "",
+    password: "",
   });
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim()) {
+    if (
+      !formData.name.trim() ||
+      !formData.login.trim() ||
+      !formData.password.trim()
+    ) {
       toast({
         title: "Ошибка",
-        description: "Имя игрока обязательно для заполнения",
-        variant: "destructive"
+        description: "Имя, логин и пароль обязательны для заполнения",
+        variant: "destructive",
       });
       return;
     }
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('players')
-        .insert([{
+      const { error } = await supabase.from("players").insert([
+        {
           name: formData.name.trim(),
           age: formData.age ? parseInt(formData.age) : null,
           position: formData.position || null,
-          jersey_number: formData.jersey_number ? parseInt(formData.jersey_number) : null
-        }]);
+          login: formData.login.trim(),
+          password: formData.password.trim(),
+        },
+      ]);
 
       if (error) throw error;
 
       toast({
         title: "Успех!",
         description: `Игрок ${formData.name} добавлен в команду`,
-        className: "bg-success text-success-foreground"
+        className: "bg-success text-success-foreground",
       });
 
-      setFormData({ name: "", age: "", position: "", jersey_number: "" });
+      setFormData({ name: "", age: "", position: "", login: "", password: "" });
       setOpen(false);
       onPlayerAdded();
     } catch (error) {
-      console.error('Error adding player:', error);
+      console.error("Error adding player:", error);
       toast({
         title: "Ошибка",
         description: "Не удалось добавить игрока",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -79,55 +97,81 @@ export const AddPlayerDialog = ({ onPlayerAdded }: AddPlayerDialogProps) => {
       </DialogTrigger>
       <DialogContent className="bg-card/95 backdrop-blur-sm border-border/50">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Добавить нового игрока</DialogTitle>
+          <DialogTitle className="text-xl font-bold">
+            Добавить нового игрока
+          </DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Имя игрока *</Label>
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               placeholder="Введите имя игрока"
               className="bg-background/50"
               required
             />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="age">Возраст</Label>
+            <Input
+              id="age"
+              type="number"
+              value={formData.age}
+              onChange={(e) =>
+                setFormData({ ...formData, age: e.target.value })
+              }
+              placeholder="Возраст"
+              className="bg-background/50"
+              min="5"
+              max="25"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="age">Возраст</Label>
+              <Label htmlFor="login">Логин *</Label>
               <Input
-                id="age"
-                type="number"
-                value={formData.age}
-                onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                placeholder="Возраст"
+                id="login"
+                value={formData.login}
+                onChange={(e) =>
+                  setFormData({ ...formData, login: e.target.value })
+                }
+                placeholder="Логин игрока"
                 className="bg-background/50"
-                min="5"
-                max="25"
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="jersey">Номер</Label>
+              <Label htmlFor="password">Пароль *</Label>
               <Input
-                id="jersey"
-                type="number"
-                value={formData.jersey_number}
-                onChange={(e) => setFormData({ ...formData, jersey_number: e.target.value })}
-                placeholder="№"
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                placeholder="Пароль"
                 className="bg-background/50"
-                min="1"
-                max="99"
+                required
               />
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="position">Позиция</Label>
-            <Select value={formData.position} onValueChange={(value) => setFormData({ ...formData, position: value })}>
+            <Select
+              value={formData.position}
+              onValueChange={(value) =>
+                setFormData({ ...formData, position: value })
+              }
+            >
               <SelectTrigger className="bg-background/50">
                 <SelectValue placeholder="Выберите позицию" />
               </SelectTrigger>
@@ -151,8 +195,8 @@ export const AddPlayerDialog = ({ onPlayerAdded }: AddPlayerDialogProps) => {
             >
               Отмена
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-1 bg-gradient-primary hover:shadow-glow"
               disabled={loading}
             >
