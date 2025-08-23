@@ -14,7 +14,111 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      attendance: {
+        Row: {
+          attended: boolean | null
+          created_at: string
+          id: string
+          player_id: string
+          points_earned: number | null
+          session_id: string
+        }
+        Insert: {
+          attended?: boolean | null
+          created_at?: string
+          id?: string
+          player_id: string
+          points_earned?: number | null
+          session_id: string
+        }
+        Update: {
+          attended?: boolean | null
+          created_at?: string
+          id?: string
+          player_id?: string
+          points_earned?: number | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "training_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      players: {
+        Row: {
+          age: number | null
+          attendance_count: number | null
+          avatar_url: string | null
+          created_at: string
+          id: string
+          jersey_number: number | null
+          level: number | null
+          name: string
+          position: string | null
+          total_points: number | null
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          attendance_count?: number | null
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          jersey_number?: number | null
+          level?: number | null
+          name: string
+          position?: string | null
+          total_points?: number | null
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          attendance_count?: number | null
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          jersey_number?: number | null
+          level?: number | null
+          name?: string
+          position?: string | null
+          total_points?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      training_sessions: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          title?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
